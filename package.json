@@ -1,13 +1,15 @@
 {
-  "name": "spinx",
+  "name": "spin-nginx",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "A tool to do spins of websites with NGINX.",
+  "bin": {
+    "spin-nginx": "./spinx.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "saibotsivad",
+  "license": "VOL",
   "dependencies": {
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
