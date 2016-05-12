@@ -8,6 +8,18 @@ The normal npm way, but globally:
 
 	npm install -g spin-nginx
 
+## passing in settings file
+
+*Every* time you run spin-nginx, you'll need to pass in the
+path to the settings file. To make life easier, you can add
+an alias in your `~/.profile` or `~/.bashrc` file like so:
+
+	alias spinner="spin-nginx --settings=/path/to/settings.json"
+
+Then, you can run `spinner` instead of running
+`sping-nginx  --settings=/path/to/settings.json`
+each time.
+
 ## first you need to configure it
 
 Run this:

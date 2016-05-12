@@ -3,7 +3,12 @@ const argv = require('minimist')(process.argv.slice(2))
 
 const action = argv._[0]
 const name = argv._[1]
-const settingsFileName = argv.settings || 'spinx-settings.json'
+const settingsFileName = argv.settings
+
+if (!settingsFileName) {
+	console.log('required parameter missing: --settings=/path/to/settings.json')
+	process.exit(1)
+}
 
 const settings = possiblyLoadSettings()
 

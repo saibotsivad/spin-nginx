@@ -1,0 +1,5 @@
+This folder is made not writable using
+
+	chmod -w test/fixtures/not-writable
+
+A test validates that a non-writable folder is a failure.

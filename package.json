@@ -6,7 +6,7 @@
     "spin-nginx": "./spinx.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test/test-*.js"
   },
   "author": "saibotsivad",
   "license": "VOL",
@@ -16,5 +16,9 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "psy": "^1.7.2"
+  },
+  "devDependencies": {
+    "shallow-copy": "0.0.1",
+    "tape": "^4.5.1"
   }
 }
