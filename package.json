@@ -6,7 +6,7 @@
     "spin-nginx": "./cli.js"
   },
   "scripts": {
-    "test": "tape test/test-*.js"
+    "test": "tape test/test-*.js && rm -rf test/fixtures/writable/temp-folder"
   },
   "author": "saibotsivad",
   "license": "VOL",

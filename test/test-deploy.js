@@ -62,7 +62,7 @@ test('mocked with a throwing executor stops the rest from running', t => {
 	const testExecutor = copy(executor)
 	try {
 		executor.makeDirectory = () => { throw 'some failure' }
-		executor.shutDownOldServer = () => { t.fail('this next thing should not run') }
+		executor.removeDirectory = () => { t.fail('this next thing should not run') }
 		deployer(executor)(copy(deploy), copy(settings), () => { t.fail('') })
 	} catch (e) {
 		t.pass('should catch the throw')
