@@ -156,7 +156,7 @@ the three branches it will use.
 
 The git repo will need a `package.json` at the root, and
 `spin-nginx` will run certain commands in that folder in
-a sequential order. See below for the `package.json` details.
+a sequential order.
 
 Here's how the three branches work (**TODO: not yet**):
 
@@ -222,8 +222,7 @@ so you will need to at least add something like:
 #### 7) start that spin (uses psy and `npm run start`)
 
 The app is started with psy, calling `npm run start` and setting
-the registered ports as environment variables. (See the
-[demo app](https://github.com/tobiaslabs/simple-crud-demo/blob/master/package.json)
+the registered ports as environment variables. (See the [demo app][demo_app]
 for an example of how this might be used.)
 
 #### 8) make sure the server is running (`npm run isup`)
@@ -235,8 +234,8 @@ variable as well. (A lot like the `npm run start` approach.)
 
 You will almost always want to generate an NGINX config
 file for your app. The ports are passed in as environment
-variables here. Check out the demo app for an example of
-how you can do this easily.
+variables here. Check out the [demo app][demo_app] for an
+example of how you can do this easily.
 
 #### 10) backup the NGINX conf file
 
@@ -252,12 +251,11 @@ does the zero-downtime reload of NGINX.
 
 # EXAMPLE
 
-Try out with the [site demo](https://github.com/tobiaslabs/simple-crud-demo)
-that I put together.
+Try it out with the [demo app][demo_app] that I put together.
 
 First run the setup:
 
-	$ spin-nginx setup
+	$ spin-nginx setup --settings=settings.json
 
 	# Configuring new spinx setup...
 	# Enter the minimum port number (default 4000): 4000
@@ -268,7 +266,7 @@ First run the setup:
 
 Then register, using the demo app git url:
 
-	$ spin-nginx register myapp
+	$ spin-nginx register myapp --settings=settings.json
 
 	# Registering a new site...
 	# Enter the URL to the repo (used in `git clone ${url}`): https://github.com/tobiaslabs/simple-crud-demo.git
@@ -279,7 +277,8 @@ Then register, using the demo app git url:
 
 Then deploy:
 
-	$ spin-nginx deploy myapp fermion
+	$ spin-nginx deploy myapp fermion --settings=settings.json
+
 	# [2016-05-09T02:50:22.455Z] shutting down myapp:fermion
 	# [2016-05-09T02:50:22.457Z] clearing out old files
 	# [2016-05-09T02:50:22.458Z] cloning the repo
@@ -305,3 +304,5 @@ Then deploy:
 Published and released under the [Very Open License](http://veryopenlicense.com/).
 
 <3
+
+[demo_app]: https://github.com/tobiaslabs/simple-crud-demo
