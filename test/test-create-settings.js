@@ -11,7 +11,7 @@ const goodSettings = {
 }
 
 test('a good set of options works correctly', t => {
-	const validated = create(goodSettings)
+	const validated = create(copy(goodSettings))
 	t.equal(validated.config.portRangeMin, 4000, 'settings should come back out')
 	t.end()
 })
