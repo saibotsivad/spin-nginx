@@ -1,6 +1,6 @@
 {
   "name": "spin-nginx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Easily deploy new versions of websites that run using NGINX.",
   "bin": {
     "spin-nginx": "./cli.js"
