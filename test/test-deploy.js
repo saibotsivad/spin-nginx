@@ -3,8 +3,8 @@ const copy = require('shallow-copy')
 const deployer = require('../lib/deploy.js')
 
 const executorFunctionNames = [
-	'makeDirectory',
 	'shutDownOldServer',
+	'makeDirectory',
 	'removeDirectory',
 	'cloneRepository',
 	'npmRunInstall',
