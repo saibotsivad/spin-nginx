@@ -13,9 +13,9 @@ if (!settingsFileName) {
 const settings = possiblyLoadSettings()
 
 const actions = {
-	setup: require('./spinx-setup.js'),
-	register: require('./spinx-register.js'),
-	deploy: require('./spinx-deploy.js')
+	setup: require('./cli-setup.js'),
+	register: require('./cli-register.js'),
+	deploy: require('./cli-deploy.js')
 }
 
 if (actions[action]) {

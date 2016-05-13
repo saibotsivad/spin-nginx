@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Easily deploy new versions of websites that run using NGINX.",
   "bin": {
-    "spin-nginx": "./spinx.js"
+    "spin-nginx": "./cli.js"
   },
   "scripts": {
     "test": "tape test/test-*.js"
