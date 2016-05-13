@@ -1,7 +1,7 @@
 {
   "name": "spin-nginx",
-  "version": "0.0.1",
-  "description": "A tool to do spins of websites with NGINX.",
+  "version": "0.1.0",
+  "description": "Easily deploy new versions of websites that run using NGINX.",
   "bin": {
     "spin-nginx": "./spinx.js"
   },
@@ -11,14 +11,15 @@
   "author": "saibotsivad",
   "license": "VOL",
   "dependencies": {
-    "co": "^4.6.0",
-    "co-prompt": "^1.0.0",
-    "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1",
-    "psy": "^1.7.2"
+    "co": "4.6.0",
+    "co-prompt": "1.0.0",
+    "minimist": "1.2.0",
+    "mkdirp": "0.5.1",
+    "psy": "1.7.2",
+    "rimraf": "2.5.2"
   },
   "devDependencies": {
     "shallow-copy": "0.0.1",
-    "tape": "^4.5.1"
+    "tape": "4.5.1"
   }
 }
