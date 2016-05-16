@@ -27,7 +27,7 @@ if (actions[action]) {
 		}
 	})
 } else {
-	console.log('use like: spinx [action] [site name]')
+	console.log('use like: spin [action] [site name]')
 	console.log('where [action] is: setup, register, deploy, rollback')
 }
 
@@ -50,7 +50,7 @@ function possiblyLoadSettings() {
 	} else if (action === 'setup') {
 		return undefined
 	} else if (!data) {
-		console.log('Settings file not found! Did you run `nginxer setup` yet?')
+		console.log('Settings file not found! Did you run the setup yet?')
 		process.exit(1)
 	} else {
 		return JSON.parse(data)
