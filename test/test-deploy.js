@@ -45,7 +45,7 @@ const settings = {
 test('mocked with noop executors works fine', t => {
 	t.plan(5)
 	const testExecutor = copy(executor)
-	testExecutor.startServer = (appSpinFolder, app, ports) => {
+	testExecutor.startServer = (appSpinFolder, app, packageName, ports) => {
 		t.equal(appSpinFolder, '../test/fixtures/demo-fermion', 'the app spin folder name is constructed correctly')
 		t.equal(app, 'demo-fermion', 'constructed app name')
 		t.deepEqual(ports, [ 1, 2 ], 'should yield the correct number of ports')
