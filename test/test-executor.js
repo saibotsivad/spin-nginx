@@ -101,6 +101,7 @@ test('buildNginxConfFile', t => {
 	executor.buildNginxConfFile(repoFolder, packageName, [ 8080 ])
 	t.end()
 })
+*/
 
 test('makeBackupOfDeployedNginxConfFile', t => {
 	// cp ${0}/${2}.conf ${1}/.rollback-${2}.conf
@@ -108,6 +109,7 @@ test('makeBackupOfDeployedNginxConfFile', t => {
 	t.end()
 })
 
+/*s
 test('deployNginx', t => {
 	// cp ${0} ${1} && nginx -t && nginx -s reload
 	executor.deployNginx(builtConf, existingConf)
