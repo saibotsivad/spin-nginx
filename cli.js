@@ -18,6 +18,7 @@ const actions = {
 	setup: require('./cli-setup.js'),
 	register: require('./cli-register.js'),
 	deploy: require('./cli-deploy.js'),
+	ls: require('./cli-ls.js'),
 	rollback: require('./cli-rollback.js')
 }
 
@@ -59,6 +60,6 @@ function possiblyLoadSettings() {
 
 function helpExit() {
 	console.log('use like: spin [action] [site name]')
-	console.log('where [action] is: setup, register, deploy, rollback')
+	console.log('where [action] is: setup, register, ls, deploy, rollback')
 	process.exit(1)	
 }
