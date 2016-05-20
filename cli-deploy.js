@@ -13,8 +13,9 @@ module.exports = function(options, cb) {
 			name: options.name,
 			spin: spin
 		}, options.settings, updatedSettings => {
-			const ports = updatedSettings.reservedPorts[options.name][spin]
-			console.log(`Done deploying ${options.name} with spin ${spin} and ports ${JSON.stringify(ports)}`)
+			const actualSpin = updatedSettings.sites[options.name].deployedSpin
+			const ports = updatedSettings.reservedPorts[options.name][actualSpin]
+			console.log(`Done deploying ${options.name} with spin ${actualSpin} and ports ${JSON.stringify(ports)}`)
 			cb(updatedSettings)
 		})
 	} catch (e) {

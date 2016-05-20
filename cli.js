@@ -17,7 +17,8 @@ const settings = possiblyLoadSettings()
 const actions = {
 	setup: require('./cli-setup.js'),
 	register: require('./cli-register.js'),
-	deploy: require('./cli-deploy.js')
+	deploy: require('./cli-deploy.js'),
+	rollback: require('./cli-rollback.js')
 }
 
 if (actions[action]) {
@@ -27,8 +28,7 @@ if (actions[action]) {
 		}
 	})
 } else {
-	console.log('use like: spin [action] [site name]')
-	console.log('where [action] is: setup, register, deploy, rollback')
+	helpExit()
 }
 
 function writeSettingsFile(data) {
@@ -45,14 +45,20 @@ function possiblyLoadSettings() {
 
 	if (action === 'setup' && data) {
 		console.log('Settings file already exists!')
-		console.log('You will need to delete the settings file first!')
+		console.log('You will need to delete the settings file first: ' + settingsFileName)
 		process.exit(1)
 	} else if (action === 'setup') {
 		return undefined
 	} else if (!data) {
 		console.log('Settings file not found! Did you run the setup yet?')
-		process.exit(1)
+		helpExit()
 	} else {
 		return JSON.parse(data)
 	}
+}
+
+function helpExit() {
+	console.log('use like: spin [action] [site name]')
+	console.log('where [action] is: setup, register, deploy, rollback')
+	process.exit(1)	
 }
