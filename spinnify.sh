@@ -18,7 +18,7 @@ LOG_FOLDER=/tmp/spins
 NGINX_FOLDER=/usr/local/etc/nginx/sites-enabled
 RESERVED_NUMBER_JSON=/Users/saibotsivad/Development/thinking/reserved-number.json
 MINIMUM_PORT=4000
-MAXIMUM_PORT=4002
+MAXIMUM_PORT=6000
 CONFIG_PREFIX="spinnify"
 
 # ----- you probably don't need to configure anything past here -----
@@ -35,59 +35,69 @@ function verify() {
 COMMAND=$1
 APP_NAME=$2
 
+# determine which spin to use
+DEPLOYED_SPIN=`npm config get $CONFIG_PREFIX-$APP_NAME:spin`
+if [ "$DEPLOYED_SPIN" == "fermion" ]; then
+	APP_SPIN="boson"
+elif [ "$DEPLOYED_SPIN" == "boson" ]; then
+	APP_SPIN="fermion"
+else
+	APP_SPIN="fermion"
+fi
+
+# some shortcuts to make things easier to read
+NPM_CONFIG=$CONFIG_PREFIX-$APP_NAME
+RESERVED="reserved-number --minimum=$MINIMUM_PORT --maximum=$MAXIMUM_PORT --settings=$RESERVED_NUMBER_JSON"
+DEPLOY_NAME=$APP_NAME-$APP_SPIN
+
 # stateful properties are stored in the npm config
 if [ "$COMMAND" == "setup" ]; then
 	echo "setup!"
 	read -p "url used for the command 'git clone \${url}': " GIT_URL
 	read -p "git branch used for deployment: " GIT_BRANCH
+	read -p "domain application should be available under: " APP_DOMAIN
 	npm config set $CONFIG_PREFIX-$APP_NAME:giturl $GIT_URL
 	npm config set $CONFIG_PREFIX-$APP_NAME:branch $GIT_BRANCH
+	npm config set $CONFIG_PREFIX-$APP_NAME:domain $APP_DOMAIN
 	echo "application is configured, congrats!"
+	exit 0
+elif [ "$COMMAND" == "unflip" ]; then
+	if [ "$DEPLOYED_SPIN" == "fermion" ]; then
+		ROLLBACK_SPIN="boson"
+	else
+		ROLLBACK_SPIN="fermion"
+	fi
+	# copy out the backup conf file
+	cp -f $SPIN_DEPLOY_FOLDER/$APP_NAME-$DEPLOYED_SPIN/.nginx-backup.conf $NGINX_FOLDER/$APP_NAME.conf
+	sudo nginx -t
+	verify $? "NGINX CONF FILE IS INVALID! See the file at: $NGINX_FOLDER/$APP_NAME.conf"
+	sudo nginx -s reload
+	# then save the prod spin
+	npm config set $CONFIG_PREFIX-$APP_NAME:spin $ROLLBACK_SPIN
+	echo "unflipped to previous spin: $ROLLBACK_SPIN"
 	exit 0
 elif [ "$COMMAND" != "flip" ]; then
 	echo "command not recognized"
 	echo "use in one of these ways:"
 	echo "  spinnify setup [app name]"
 	echo "  spinnify flip [app name]"
+	echo "  spinnify unflip [app name]"
 	exit 1
 fi
-
-# some shortcuts to make things easier to read
-NPM_CONFIG=$CONFIG_PREFIX-$APP_NAME
-RESERVED="reserved-number --minimum=$MINIMUM_PORT --maximum=$MAXIMUM_PORT --settings=$RESERVED_NUMBER_JSON"
 
 # load the application git properties
 GIT_BRANCH=`npm config get $NPM_CONFIG:branch`
 GIT_URL=`npm config get $NPM_CONFIG:giturl`
-if [ "$GIT_BRANCH" == "undefined" -o "$GIT_URL" == "undefined" ]; then
+APP_DOMAIN=`npm config get $NPM_CONFIG:domain`
+if [ "$GIT_BRANCH" == "undefined" -o "$GIT_URL" == "undefined" -o "$APP_DOMAIN" == "undefined" ]; then
 	echo "could not locate configuration, was this application set up yet?"
 	exit 1
 fi
 
-# figure out which spin to use
-DEPLOYED_SPIN=`npm config get $CONFIG_PREFIX-$APP_NAME:spin`
-if [ "$DEPLOYED_SPIN" == "fermion" ]; then
-	echo "currently deployed is: fermion"
-	echo "restarting: boson"
-	APP_SPIN="boson"
-elif [ "$DEPLOYED_SPIN" == "boson" ]; then
-	echo "currently deployed is: boson"
-	echo "restarting: fermion"
-	APP_SPIN="fermion"
-else
-	echo "no spin currently deployed"
-	echo "starting: fermion"
-	APP_SPIN="fermion"
-fi
-
-# another shortcut for easier reading
-DEPLOY_NAME=$APP_NAME-$APP_SPIN
-
-# shut down old spin
-if [ $DEPLOYED_SPIN != "undefined" ]; then
-	echo "shutting down $APP_NAME@$APP_SPIN"
-	psy kill "$DEPLOY_NAME"
-fi
+# shut down old spin (psy exits OK even if app didn't exist)
+echo "shutting down $DEPLOY_NAME"
+psy stop "$DEPLOY_NAME"
+psy rm "$DEPLOY_NAME"
 
 # deallocate the port
 $RESERVED deallocate $DEPLOY_NAME
@@ -136,32 +146,35 @@ verify $?
 # TODO: this stuff with nginx is much more expiremental
 
 # before we copy out a new nginx conf, lets assert the existing ones are okay
-nginx -t
+sudo nginx -t
 verify $? "existing nginx config files fail!"
 
 # backup the old nginx config
-cp -f NGINX_FOLDER/$APP_NAME.conf $SPIN_DEPLOY_FOLDER/$DEPLOY_NAME/.$CONFIG_PREFIX-backup.conf
+cp -f $NGINX_FOLDER/$APP_NAME.conf $SPIN_DEPLOY_FOLDER/$DEPLOY_NAME/.nginx-backup.conf
 
 # applications need to generate an nginx config based on the $PORT
+export DOMAIN=$APP_DOMAIN
 npm run nginx
 verify $? "failed to generate an nginx config file"
 
 # deploy the generated nginx config file
-cp -f $SPIN_DEPLOY_FOLDER/$DEPLOY_NAME/.nginx.conf NGINX_FOLDER/$APP_NAME.conf
+cp -f $SPIN_DEPLOY_FOLDER/$DEPLOY_NAME/.nginx-built.conf $NGINX_FOLDER/$APP_NAME.conf
 
 # assert the nginx file works
-nginx -t
+sudo nginx -t
 verify $? "generated nginx config file fails!"
 
 # then reload nginx
-nginx -s reload
+sudo nginx -s reload
 verify $? "reloading nginx has failed!"
 
 # done with the nginx stuff
 # ---------------
 
-# and that's about it!
+# finally, record which spin is on prod
+npm config set $CONFIG_PREFIX-$APP_NAME:spin $APP_SPIN
+echo "DONE! $APP_NAME has been deployed as $APP_SPIN"
 
-# just need to return to starting folder
+# and that's about it! just need to return to the starting folder
 popd
 popd
