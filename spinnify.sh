@@ -35,6 +35,8 @@ function verify() {
 COMMAND=$1
 APP_NAME=$2
 
+echo "spinnify $COMMAND for $APP_NAME"
+
 # determine which spin to use
 DEPLOYED_SPIN=`npm config get $CONFIG_PREFIX-$APP_NAME:spin`
 if [ "$DEPLOYED_SPIN" == "fermion" ]; then
