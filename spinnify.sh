@@ -58,9 +58,11 @@ if [ "$COMMAND" == "setup" ]; then
 	read -p "url used for the command 'git clone \${url}': " GIT_URL
 	read -p "git branch used for deployment: " GIT_BRANCH
 	read -p "domain application should be available under: " APP_DOMAIN
+	read -p "path and filename for configuration file: " APP_CONFIG
 	npm config set $CONFIG_PREFIX-$APP_NAME:giturl $GIT_URL
 	npm config set $CONFIG_PREFIX-$APP_NAME:branch $GIT_BRANCH
 	npm config set $CONFIG_PREFIX-$APP_NAME:domain $APP_DOMAIN
+	npm config set $CONFIG_PREFIX-$APP_NAME:config $APP_CONFIG
 	echo "application is configured, congrats!"
 	exit 0
 elif [ "$COMMAND" == "unflip" ]; then
@@ -91,7 +93,8 @@ fi
 GIT_BRANCH=`npm config get $NPM_CONFIG:branch`
 GIT_URL=`npm config get $NPM_CONFIG:giturl`
 APP_DOMAIN=`npm config get $NPM_CONFIG:domain`
-if [ "$GIT_BRANCH" == "undefined" -o "$GIT_URL" == "undefined" -o "$APP_DOMAIN" == "undefined" ]; then
+APP_CONFIG=`npm config get $NPM_CONFIG:config`
+if [ "$GIT_BRANCH" == "undefined" -o "$GIT_URL" == "undefined" -o "$APP_DOMAIN" == "undefined" -o "$APP_CONFIG" == "undefined" ]; then
 	echo "could not locate configuration, was this application set up yet?"
 	exit 1
 fi
@@ -126,7 +129,7 @@ APP_PORT=`$RESERVED allocate $DEPLOY_NAME`
 verify $? "failure allocating port"
 
 # start the application
-psy start -n "$DEPLOY_NAME" --logfile=$SPIN_DEPLOY_FOLDER/$DEPLOY_NAME.log --env.PORT=$APP_PORT -- npm run start
+psy start -n "$DEPLOY_NAME" --logfile=$SPIN_DEPLOY_FOLDER/$DEPLOY_NAME.log --env.PORT=$APP_PORT --env.CONFIG=$APP_CONFIG -- npm run start
 verify $? "failure starting application"
 
 # the question of when an application is actually "running" is actually
@@ -141,6 +144,7 @@ verify $? "failure starting application"
 #    console.log(process.env.PORT)
 #
 export PORT=$APP_PORT
+export CONFIG=$APP_CONFIG
 npm run isup
 verify $?
 
