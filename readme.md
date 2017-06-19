@@ -1,11 +1,99 @@
 # spin-nginx
 
-Easily deploy new versions of websites that run using NGINX.
+Easily and safely deploy new versions (spins) of websites
+that run using [NGINX](https://www.nginx.com/).
 
-The gist of it is that instead of typing a bunch of commands,
-you can type `spin-nginx deploy mysite.com` and it'll deploy
-the updates site with *zero-downtime*, with pre-deploy testing
-built in.
+## two-versions
+
+Elsewhere called "blue-green deployment", the idea is that
+you start up the new server (as a new "spin"), switch traffic
+over to the new application, and once you are satisfied
+that the new application is running correctly you can shut
+down the old server.
+
+* Using NGINX, switching over to the new application can be
+	done with zero downtime.
+* Because the old application is left running, if some error
+	is discovered in the updated version, you can rollback to
+	the old version immediately with zero downtime.
+* There are only ever two versions running, so to bring up the
+	new version you need to shut down the old version.
+
+## overview
+
+The spinner runs these operations, in this order:
+
+1. Shut down old application
+2. Clone new code
+3. Start the new application
+4. Switch traffic to new application
+
+There are additional hooks you can have run prior to and after
+each of these operations.
+
+## all the operations
+
+Since spin-nginx uses node, it also uses
+[npm scripts](https://docs.npmjs.com/misc/scripts)
+as the commands.
+
+If the `package.json` `scripts` has the operation, it
+will be run. The only operation *required* is `start`!
+
+The commands are run in this order:
+
+1. Shut down old version: `npm run spin-shutdown`
+2. Git clone runs to grab the latest code: `git clone`
+3. Start the application: `npm run spin-start`
+4. Validate the application is running: `npm run spin-is-up`
+5. Use new NGINX configuration file and reload NGINX: `nginx -s reload`
+6. Post-reload hook: `npm run spin-complete`
+
+## environment variables
+
+Each npm run scrip is run with a set of environment variables that
+have been previously configured for that application.
+
+You can configure additional environment variables per
+application or for applications overall, but spin-nginx
+reserves the following environment variable names:
+
+* `PORT` : port assigned by spinner to this application
+* `CONFIG` : configured file path to configuration file
+* `DOMAIN` : configured domain for this application
+
+E.g. the start command is run something like this, if
+it were showed as a set of commands:
+
+	export PORT=5001
+	export CONFIG=/path/to/config.json
+	export DOMAIN=mysite.com
+	npm run spin-start
+
+So that in your start script, assuming you are using node and
+JavaScript, you might do something like this:
+
+```js
+const port = parseInt(process.env.PORT, 10)
+const config = require(process.env.CONFIG)
+const domain = process.env.DOMAIN
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## opinions
 

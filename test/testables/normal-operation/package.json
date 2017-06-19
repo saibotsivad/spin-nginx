@@ -1,0 +1,13 @@
+{
+	"name": "normal-operation",
+	"version": "0.0.1",
+	"scripts": {
+		"test": "node assert.js $DOMAIN $PORT $CONFIG",
+		"build": "node assert.js $DOMAIN $PORT $CONFIG",
+		"start": "node assert.js $DOMAIN $PORT $CONFIG",
+		"isup": "node assert.js $DOMAIN $PORT $CONFIG"
+	},
+	"config": {
+		"nginxConfigurationFile": "nginx.conf"
+	}
+}

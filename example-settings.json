@@ -1,0 +1,23 @@
+{
+  "config": {
+    "portRangeMin": 4000,
+    "portRangeMax": 6000,
+    "deployFolder": "/var/www",
+    "nginxFolder": "/usr/local/etc/nginx/sites-enabled"
+  },
+  "sites": {
+    "demo": {
+      "repo": "https://github.com/tobiaslabs/spin-nginx-example-website.git",
+      "branch": "master",
+      "domain": "demo.com",
+      "configuration": "/var/www/demo-config.json",
+      "deployed": "fermion"
+    }
+  },
+  "ports": {
+    "demo": {
+      "fermion": 4000,
+      "boson": 4001
+    }
+  }
+}

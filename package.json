@@ -6,20 +6,25 @@
     "spin-nginx": "./cli.js"
   },
   "scripts": {
-    "test": "tape test/test-*.js && rm -rf test/fixtures/writable/temp-folder",
-    "build": "echo \"no build\""
+    "clean": "rm -rf test/testables-copy",
+    "test": "tape test/test-*.js"
   },
   "author": "saibotsivad",
   "license": "VOL",
   "dependencies": {
     "co": "4.6.0",
     "co-prompt": "1.0.0",
+    "fs-extra": "^0.30.0",
     "minimist": "1.2.0",
     "mkdirp": "0.5.1",
+    "path-exists": "^3.0.0",
     "psy": "1.7.2",
-    "rimraf": "2.5.2"
+    "rimraf": "2.5.2",
+    "shell-escape-tag": "^1.0.2",
+    "shell-tag": "^1.0.1"
   },
   "devDependencies": {
+    "extend": "^3.0.0",
     "shallow-copy": "0.0.1",
     "tape": "4.5.1"
   }

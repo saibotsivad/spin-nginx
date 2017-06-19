@@ -1,0 +1,23 @@
+{
+  "config": {
+    "portRangeMin": 4000,
+    "portRangeMax": 6000,
+    "deployFolder": "/ABSOLUTE/PATH",
+    "nginxFolder": "/DIFFERENT/ABSOLUTE/PATH"
+  },
+  "sites": {
+    "test": {
+      "repo": "git@github.com:USERNAME/REPO.git",
+      "branch": "master",
+      "domain": "test.com",
+      "configuration": "/SOME/PATH/SETTINGS.JSON",
+      "deployed": "fermion"
+    }
+  },
+  "ports": {
+    "test": {
+      "fermion": 4000,
+      "boson": 4001
+    }
+  }
+}
