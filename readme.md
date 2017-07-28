@@ -1,5 +1,7 @@
 # spin-nginx
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/saibotsivad/spin-nginx.svg)](https://greenkeeper.io/)
+
 Easily deploy new versions of websites that run using NGINX.
 
 The gist of it is that instead of typing a bunch of commands,
