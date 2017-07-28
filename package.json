@@ -16,11 +16,11 @@
     "co-prompt": "1.0.0",
     "minimist": "1.2.0",
     "mkdirp": "0.5.1",
-    "psy": "1.7.2",
-    "rimraf": "2.5.2"
+    "psy": "1.8.1",
+    "rimraf": "2.6.1"
   },
   "devDependencies": {
     "shallow-copy": "0.0.1",
-    "tape": "4.5.1"
+    "tape": "4.7.0"
   }
 }
